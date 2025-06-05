@@ -13,6 +13,7 @@ enum class ClockMode : uint8
 {
 	MessageDialog = 0,
 	notification,
+	ExecScript,
 	None,
 };
 
@@ -49,6 +50,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Date Time", meta = (ClampMin = "0", ClampMax = "59", EditCondition = "CurTimeMode!=TimeMode::EverySecond"))
 	int Second;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Date Time", meta = (ClampMin = "0", ClampMax = "59", EditCondition = "CurClockMode==ClockMode::ExecScript"))
+	FString Script;
+
 	bool bEnd = false;
 };
 
@@ -70,6 +74,13 @@ public:
 
 	static void OpenDiago(FString Content)
 	{
+		FMessageDialog::Open(EAppMsgType::Ok, FText::FromString(Content));
+		return;
+	}
+
+	static void ExecScript(FString TitleContent,FString Script)
+	{
+		Exec
 		FMessageDialog::Open(EAppMsgType::Ok, FText::FromString(Content));
 		return;
 	}
@@ -122,6 +133,10 @@ public:
 						else if (CurClockInfo.CurClockMode == ClockMode::MessageDialog)
 						{
 							OpenDiago(CurDialog);
+						}
+						else if (CurClockInfo.CurClockMode == ClockMode::ExecScript)
+						{
+							ExecScript(CurDialog, CurClockInfo.Script);
 						}
 					}
 				}
