@@ -6,6 +6,7 @@
 #include "UObject/ObjectMacros.h"
 #include "Framework/Notifications/NotificationManager.h"
 #include "Widgets/Notifications/SNotificationList.h"
+#include "IPythonScriptPlugin.h"
 #include "CCUsersSettings.generated.h"
 
 UENUM()
@@ -50,7 +51,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Date Time", meta = (ClampMin = "0", ClampMax = "59", EditCondition = "CurTimeMode!=TimeMode::EverySecond"))
 	int Second;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Date Time", meta = (ClampMin = "0", ClampMax = "59", EditCondition = "CurClockMode==ClockMode::ExecScript"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Date Time", meta = (ClampMin = "0", ClampMax = "59", Visibility = "CurClockMode==ClockMode::ExecScript"))
 	FString Script;
 
 	bool bEnd = false;
@@ -80,9 +81,7 @@ public:
 
 	static void ExecScript(FString TitleContent,FString Script)
 	{
-		Exec
-		FMessageDialog::Open(EAppMsgType::Ok, FText::FromString(Content));
-		return;
+		IPythonScriptPlugin::Get()->ExecPythonCommand(*Script);
 	}
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "BXS|NotificationHelpers")

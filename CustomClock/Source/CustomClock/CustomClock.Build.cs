@@ -46,7 +46,8 @@ public class CustomClock : ModuleRules
                 "SlateCore",
                 "DeveloperSettings",
                 "Projects",
-                "PropertyEditor"
+                "PropertyEditor",
+                "PythonScriptPlugin",
 				// ... add private dependencies that you statically link with here ...	
 			}
             );
