@@ -81,7 +81,19 @@ public:
 
 	static void ExecScript(FString TitleContent,FString Script)
 	{
-		IPythonScriptPlugin::Get()->ExecPythonCommand(*Script);
+		if (Script.StartsWith("PY "))
+		{
+			FString RealFunctionScript;
+			if (Script.Split(TEXT(" "), nullptr, &RealFunctionScript))
+			{
+				IPythonScriptPlugin::Get()->ExecPythonCommand(*RealFunctionScript);
+				return;
+			}
+		}
+		IPythonScriptPlugin::Get()->ExecPythonCommand(TEXT("import unreal"));
+		IPythonScriptPlugin::Get()->ExecPythonCommand(TEXT("EUW=unreal.new_object(unreal.EditorAssetLibrary.load_blueprint_class(\"/Game/Developers/baixiaosheng/EUW_CallFunction\"))"));
+		FString RealFunctionScript = TEXT("EUW.call_method(\"") + Script + TEXT("\",())");
+		IPythonScriptPlugin::Get()->ExecPythonCommand(*RealFunctionScript);
 	}
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "BXS|NotificationHelpers")
