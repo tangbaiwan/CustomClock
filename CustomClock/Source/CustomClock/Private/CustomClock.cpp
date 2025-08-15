@@ -19,8 +19,16 @@ void FCustomClockModule::ShutdownModule()
 }
 void FCustomClockModule::TestOutTime()
 {
+	if (!GEditor)
+	{
+		return;
+	}
     AsyncTask(ENamedThreads::GameThread, [&]()
         {
+			if (!GEditor)
+			{
+				return;
+			}
             auto Func = [&]() {
 				CurTime = FDateTime::Now().ToString(TEXT("%H-%M-%S"));
 				CurTimeList.Empty();

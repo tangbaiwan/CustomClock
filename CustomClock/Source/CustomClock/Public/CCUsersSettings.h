@@ -128,7 +128,23 @@ public:
 			}
 			if (CurClockInfo.Hours == CurIntArray[0] || CurTimeModeInt >0)
 			{
-				if (CurClockInfo.Minter == CurIntArray[1] || CurTimeModeInt >1)
+				if (CurTimeModeInt == 1 && CurClockInfo.Minter == CurIntArray[1] && CurClockInfo.Second == CurIntArray[2])
+				{
+					FString CurDialog = FString::Printf(TEXT("现在是: \n%d点%d分%d秒                    "), CurIntArray[0], CurIntArray[1], CurIntArray[2]) + "\n" + CurClockInfo.CurClockName;
+					if (CurClockInfo.CurClockMode == ClockMode::notification)
+					{
+						CreateEditorNotification(FText::FromString(CurDialog));
+					}
+					else if (CurClockInfo.CurClockMode == ClockMode::MessageDialog)
+					{
+						OpenDiago(CurDialog);
+					}
+					else if (CurClockInfo.CurClockMode == ClockMode::ExecScript)
+					{
+						ExecScript(CurDialog, CurClockInfo.Script);
+					}
+				}
+				else if (CurClockInfo.Minter == CurIntArray[1] || CurTimeModeInt >1)
 				{
 					if (CurClockInfo.Second == CurIntArray[2] || CurTimeModeInt == 3)
 					{
